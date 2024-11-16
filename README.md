@@ -103,9 +103,9 @@ shift $(($OPTIND - 1))
 ```
 rm -f zed zzed zerd qed qqed fed ffed xx yy xxx yyy moe
 
-
+rm -f README.md
 PART=header
-echo "# $PART"       > README.md
+echo "# $PART"      >> README.md
 echo ""             >> README.md
 echo "\`\`\`"       >> README.md
 cat $PART           >> README.md
@@ -117,8 +117,13 @@ echo ""             >> README.md
 echo "\`\`\`"       >> README.md
 cat $PART           >> README.md
 echo "\`\`\`"       >> README.md
+
+PART=getheader
+echo "# $PART"      >> README.md
 echo ""             >> README.md
-echo ""             >> README.md
+echo "\`\`\`"       >> README.md
+cat $PART           >> README.md
+echo "\`\`\`"       >> README.md
 
 cat README.md
 git add README.md
@@ -135,5 +140,15 @@ cp ./getheader /etc/center
 
 
 ```
+# getheader
 
+```
+wget -O newbashscript https://raw.githubusercontent.com/archernar/header/refs/heads/master/header
+ls -l newbashscript
+echo ""
+echo ""
+echo "https://github.com/archernar/header"
+echo ""
+echo ""
 
+```
