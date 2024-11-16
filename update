@@ -4,6 +4,7 @@ echo ""             >> README.md
 echo "```"          >> README.md
 cat header          >> README.md
 echo "```"          >> README.md
+git add README.md
 
 git status
 git add -u;git commit  -m "Update"
