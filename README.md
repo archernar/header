@@ -106,11 +106,11 @@ shift $(($OPTIND - 1))
 rm -f zed zzed zerd qed qqed fed ffed xx yy xxx yyy moe
 
 
-
-echo "# header"      > README.md
+PART=header
+echo "# $PART"       > README.md
 echo ""             >> README.md
 echo "\`\`\`"       >> README.md
-cat header          >> README.md
+cat $PART           >> README.md
 echo "\`\`\`"       >> README.md
 
 echo ""             >> README.md
