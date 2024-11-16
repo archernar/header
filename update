@@ -8,13 +8,14 @@ echo "\`\`\`"       >> README.md
 cat $PART           >> README.md
 echo "\`\`\`"       >> README.md
 
-echo ""             >> README.md
-echo ""             >> README.md
-echo "# update"     >> README.md
+PART=update
+echo "# $PART"       > README.md
 echo ""             >> README.md
 echo "\`\`\`"       >> README.md
-cat update          >> README.md
+cat $PART           >> README.md
 echo "\`\`\`"       >> README.md
+echo ""             >> README.md
+echo ""             >> README.md
 
 cat README.md
 git add README.md
