@@ -98,3 +98,41 @@ do
 done
 shift $(($OPTIND - 1))
 ```
+
+
+# update
+
+```
+rm -f zed zzed zerd qed qqed fed ffed xx yy xxx yyy moe
+
+
+
+echo "# header"      > README.md
+echo ""             >> README.md
+echo "\`\`\`"       >> README.md
+cat header          >> README.md
+echo "\`\`\`"       >> README.md
+
+echo ""             >> README.md
+echo ""             >> README.md
+echo "# update"     >> README.md
+echo ""             >> README.md
+echo "\`\`\`"       >> README.md
+cat update          >> README.md
+echo "\`\`\`"       >> README.md
+
+cat README.md
+git add README.md
+
+
+
+
+
+git status
+git add -u;git commit  -m "Update"
+git push -u origin master
+
+cp ./getheader /etc/center
+
+
+```
