@@ -1,0 +1,8 @@
+rm -f zed zzed zerd qed qqed fed ffed xx yy xxx yyy moe
+
+
+git status
+git add -u;git commit  -m "Update"
+git push -u origin master
+
+cp ./getheader /etc/center
