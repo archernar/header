@@ -9,7 +9,7 @@ cat $PART           >> README.md
 echo "\`\`\`"       >> README.md
 
 PART=update
-echo "# $PART"       > README.md
+echo "# $PART"      >> README.md
 echo ""             >> README.md
 echo "\`\`\`"       >> README.md
 cat $PART           >> README.md
