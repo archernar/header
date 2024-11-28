@@ -100,9 +100,9 @@ if [ $# -eq 1 ]; then
     # File to write to
     filename="$1"
     file="/etc/scm/header/$filename"
-    if [ -f "$filename" ]; then
+    if [ -f "./$filename" ]; then
         # Check if the file exists
-        if [ -f "/etc/scm/header/$file" ]; then
+        if [ -f "/etc/scm/header/$filename" ]; then
           read -p "File '$file' already exists. Overwrite? (y/n): " answer
           case "$answer" in
             [Yy]* ) echo "Overwriting...";;
@@ -111,14 +111,14 @@ if [ $# -eq 1 ]; then
           esac
         fi
         # Write to file
-        cat "$filename" "$file"
+        cat "$filename" > "$file"
         ls -l "$file"
         D=`pwd`
-        echo $D
         cd /etc/scm/header
         git add "$filename"
+        git commit -m "Updated via snip script"
         cd "$D"
-        pwd
+        ls -l /etc/scm/header
     else
         echo "File [$1] does not exist"
         exit
