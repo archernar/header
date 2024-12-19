@@ -29,8 +29,14 @@ git add README.md
 echo "# bash functions"       > bash.functions
 echo "#"                     >> bash.functions
 echo ""                      >> bash.functions
-cat *.sh                     >> bash.functions
-git add bashr.functions
+for fn in ./*.sh; do
+    echo ""                      >> bash.functions
+    echo "# $fn"                 >> bash.functions
+    echo "# ==================================================="                     >> bash.functions
+    echo ""                      >> bash.functions
+    car "$fn"                    >> bash.functions
+done
+git add bash.functions
 
 
 git status
