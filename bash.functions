@@ -1,0 +1,23 @@
+
+isnfs () {                                                                                                                       
+    LOCAL=`stat -f -c %T "$1"`                                                                                                   
+    if [ "$LOCAL" == "nfs" ]; then                                                                                               
+         RETVAL="YES"                                                                                                             
+    else                                                                                                                         
+         RETVAL="NO"                                                                                                              
+    fi                                                                                                                           
+}
+
+consolebar () {
+    echo "********************************************************************************************"
+}
+consolemsg () {
+#   consolebar
+    echo "** $1"
+#   consolebar
+    A=$A
+}
+optconsolemsg () {
+#    echo "** $1"
+    A=$A
+}
