@@ -213,14 +213,13 @@ cat README.md
 git add README.md
 
 
-echo "# bash functions"       > bash.functions
-echo "#"                     >> bash.functions
+echo "#"                      > bash.functions
+echo "# bash functions"      >> bash.functions
 echo ""                      >> bash.functions
 for fn in ./*.sh; do
     echo ""                      >> bash.functions
     echo "# $fn"                 >> bash.functions
-    echo "# ==================================================="                     >> bash.functions
-    echo ""                      >> bash.functions
+    echo "############################################################################################" >> bash.functions
     cat "$fn"                    >> bash.functions
 done
 git add bash.functions
@@ -232,6 +231,7 @@ git push -u origin master
 
 cp ./getheader       /etc/center
 cp ./bash.functions  /etc/center
+
 
 
 ```
