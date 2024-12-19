@@ -1,4 +1,6 @@
 #!/usr/bin/bash
+mestes
+H=0E014AAF
 Tmp=/tmp/$$
 Tmp1=/tmp/$$_$$
 trap 'exit 0' INT HUP QUIT TERM ALRM USR1
