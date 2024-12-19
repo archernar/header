@@ -43,6 +43,76 @@ find . -type f
 
 
 ############################################################################################
+# ./find_secrets.sh
+############################################################################################
+#!/usr/bin/bash
+Tmp=/tmp/$$
+Tmp1=/tmp/$$_$$
+trap 'exit 0' INT HUP QUIT TERM ALRM USR1
+trap 'rm -f "$Tmp"' EXIT
+rm -f "$Tmp"  >/dev/null 2>&1
+
+# Define patterns for sensitive data (expand as needed)
+# patterns=(
+#     "password[[:space:]]*[:=][[:space:]]*[\"']?[^\"']*[\"']?"  # Basic password pattern
+#     "secret[[:space:]]*[:=][[:space:]]*[\"']?[^\"']*[\"']?"   # Secret pattern
+#     "key[[:space:]]*[:=][[:space:]]*[\"']?[^\"']*[\"']?"      # Key pattern
+#     "AWS_ACCESS_KEY_ID[[:space:]]*[:=][[:space:]]*[\"']?[A-Z0-9]*[\"']?" # AWS Access Key ID
+#     "AWS_SECRET_ACCESS_KEY[[:space:]]*[:=][[:space:]]*[\"']?[a-zA-Z0-9/+=]*[\"']?" # AWS Secret Access Key
+#     "api_key[[:space:]]*[:=][[:space:]]*[\"']?[^\"']*[\"']?" # API Key pattern
+#     "database_url[[:space:]]*[:=][[:space:]]*[\"']?[^\"']*[\"']?" # Database URL
+#     "connection_string[[:space:]]*[:=][[:space:]]*[\"']?[^\"']*[\"']?" # Connection String
+#     "private_key[[:space:]]*[:=][[:space:]]*[\"']?[^\"']*[\"']?" # Private Key
+#     "client_secret[[:space:]]*[:=][[:space:]]*[\"']?[^\"']*[\"']?" # Client Secret
+#     "oauth_token[[:space:]]*[:=][[:space:]]*[\"']?[^\"']*[\"']?" # OAuth Token
+#     "bearer_token[[:space:]]*[:=][[:space:]]*[\"']?[^\"']*[\"']?" # Bearer Token
+# )
+. ./secure_patterns
+
+# Define file types to search (customize as needed)
+file_types=("*.sh" "*.py" "*.js" "*.php" "*.html" "*.xml" "*.json" "*.txt" "*.conf" "*.yaml" "*.yml" "*.sh" "*.bash" "*.c" "*.cpp" "*.java" "*.go")
+
+
+# Function to search a single file
+search_file() {
+    local file="$1"
+    local line_num
+    local line
+
+    for pattern in "${patterns[@]}"; do
+        while IFS= read -r line; do
+            line_num=$((line_num + 1))
+            if [[ "$line" =~ $pattern ]]; then
+                echo "File: $file, Line: $line_num: $line, Pattern: $pattern" >> $Tmp
+            fi
+        done < "$file"
+        line_num=0 # Reset line number for next pattern
+    done
+}
+
+# Find files and search them
+# find . \( -name "${file_types[@]}" \) -print0 | while IFS= read -r -d $'\0' file; do
+find . \( -name "*.sh" \) -print0 | while IFS= read -r -d $'\0' file; do
+    if [ -f "$file" ]; then # Check if it's a regular file (not a directory)
+      search_file "$file"
+    fi
+done
+
+
+
+if [ -f $Tmp ]; then
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    echo "!!!!    Secrets Found    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    cat $Tmp | sort | uniq
+    exit 1
+fi
+
+echo "Finished searching."
+exit 0
+
+
+############################################################################################
 # ./fullpathd.sh
 ############################################################################################
 find . -type d 2>/dev/null | sed 's#^.#/tmp#'
@@ -99,7 +169,6 @@ isnfs () {
 ############################################################################################
 # ./MonitorOpenNetstatConnections.sh
 ############################################################################################
-# mestes
 watch -n 1 'netstat -tpanl | grep ESTABLISHED'
 
 
