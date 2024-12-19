@@ -1,1 +1,7 @@
-test
+for fn in ./*.sh; do
+    echo ""
+    f=`echo "$fn" | sed 's/^..//'`
+    figlet -f slant "$f"
+    echo ""
+    cat  "$fn"
+done

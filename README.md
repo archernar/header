@@ -97,6 +97,90 @@ do
     esac
 done
 shift $(($OPTIND - 1))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# +===================================================================================================+
+# +===================================================================================================+
+
+# -a file file exists
+#  -d file file exists and is a directory
+#  -f file file exists and is an ordinary file
+#  -r file file exists and is readable
+#  -s file file exists and has a size greater than 0
+#  -w file file exits and is writable
+#  -x file file exists and is executable
+#  -L file file exists and is a symbolic link
+#  -O file file exists and owned by user file1 i
+#  -nt file2 file1 exists and is newer than file2 file1 
+#  -ot file2 file1 exists and is older then file
+# 
+# if [ ! -d "$DIRECTORY" ]; then
+#   echo "The directory [$DIRECTORY] does not exist."
+#   exit 0
+# fi
+# 
+# 0  - Normal Style (reset)
+# 1  - Bold
+# 2  - Dim
+# 3  - Italic
+# 4  - Underlined
+# 5  - Blinking
+# 7  - Reverse
+# 8  - Invisible
+# 30 - BLACK
+# 31 - RED
+# 32 - GREEN
+# 33 - YELLOW
+# 34 - BLUE
+# 35 - PURPLE
+# 36 - CYAN
+# 37 - WHITE
+# bold=$(printf '\033[%sm' "4")
+# reset=$(printf '\033[%sm' "0")
+# 
+# cat <<USAGE_TEXT
+# 
+# USAGE_TEXT
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+
+
+
+
+
+
+
+
 ```
 # update
 
@@ -136,15 +220,46 @@ git status
 git add -u;git commit  -m "Update"
 git push -u origin master
 
-cp ./getheader /etc/center
+cp ./getheader       /etc/center
+cp ./bash.funcitons  /etc/center
 
 
 ```
 # getheader
 
 ```
+#!/usr/bin/bash
+Tmp=/tmp/$$
+Tmp1=/tmp/$$_$$
+trap 'exit 0' INT HUP QUIT TERM ALRM USR1
+trap 'rm -f "$Tmp" "$Tmp1"' EXIT
+rm -f "$Tmp"  >/dev/null 2>&1
+rm -f "$Tmp1"  >/dev/null 2>&1
+
+
+SCRIPTNAME=""
+
+while getopts "s:" arg
+do
+    case $arg in
+        s) SCRIPTNAME="$OPTARG"
+           echo $SCRIPTNAME
+           if [ ! -f "$SCRIPTNAME" ]; then
+               echo "The file [$SCRIPTNAME] does not exist."
+               exit 0
+           fi
+           exit 0
+           ;;
+    esac
+done
+shift $(($OPTIND - 1))
+
+
+
 wget -O newbashscript https://raw.githubusercontent.com/archernar/header/refs/heads/master/header
+wget -O bash.functions https://raw.githubusercontent.com/archernar/header/refs/heads/master/bash.functions
 ls -l newbashscript
+ls -l bash.functions
 echo ""
 echo ""
 echo "https://github.com/archernar/header"

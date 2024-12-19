@@ -81,25 +81,56 @@ optconsolemsg () {
     A=$A
 }
 
+MESSAGE="Updated via snip script"
+VIEWONLY=0
+FN=""
+ONELINER=""
 
-while getopts "ha:" arg
+while getopts "hm:vf:o:" arg
 do
     case $arg in
         h) usagefull;
            exit 0;
            ;;
-        a) A="$OPTARG"
-           exit 0
+        m) MESSAGE="$OPTARG"
+           ;;
+        v) VIEWONLY=1
+           ;;
+        f) echo "$OPTARG" 
+           FN=`echo "$OPTARG" | gawk '{split(tolower($0),A," ");sz="";for (v in A) {sz=sz toupper(substr( A[v],1,1)) substr(A[v],2);} print sz}'`
+           ;;
+        o) ONELINER="$OPTARG"
            ;;
     esac
 done
 shift $(($OPTIND - 1))
 
+if [ $VIEWONLY -eq 1 ]; then
+    cat "$1"
+    exit
+fi
 
-if [ $# -eq 1 ]; then
+#if [ $# -eq 1 ]; then
+if [ 1 -eq 1 ]; then
     # File to write to
-    filename="$1"
+    if [ "$FN" == "" ]; then                                                                                               
+        filename="$1"
+    else
+        if [ ! -f "./$FN" ]; then
+            echo "$ONELINER" > "$FN"
+            cat "$FN"
+            filename="$FN"
+            echo "$filename"
+        else
+            echo "$FN exists. Exiting..."
+            exit
+        fi
+    fi
     file="/etc/scm/header/$filename"
+    if [ "$filename" == "snip" ]; then
+        echo "Cannot update the file [snip] this way"
+        exit
+    fi
     if [ -f "./$filename" ]; then
         # Check if the file exists
         if [ -f "/etc/scm/header/$filename" ]; then
@@ -116,7 +147,7 @@ if [ $# -eq 1 ]; then
         D=`pwd`
         cd /etc/scm/header
         git add "$filename"
-        git commit -m "Updated via snip script"
+        git commit -m "$MESSAGE"
         cd "$D"
         ls -l /etc/scm/header
     else

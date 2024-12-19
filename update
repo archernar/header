@@ -33,6 +33,7 @@ git status
 git add -u;git commit  -m "Update"
 git push -u origin master
 
-cp ./getheader /etc/center
+cp ./getheader       /etc/center
+cp ./bash.funcitons  /etc/center
 
 
