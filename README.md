@@ -185,6 +185,7 @@ shift $(($OPTIND - 1))
 # update
 
 ```
+./update.sh
 ```
 # getheader
 
