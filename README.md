@@ -213,7 +213,11 @@ cat README.md
 git add README.md
 
 
-
+echo "# bash functions"       > bash.functions
+echo "#"                     >> bash.functions
+echo ""                      >> bash.functions
+cat *.sh                     >> bash.functions
+git add bashr.functions
 
 
 git status
@@ -221,7 +225,7 @@ git add -u;git commit  -m "Update"
 git push -u origin master
 
 cp ./getheader       /etc/center
-cp ./bash.funcitons  /etc/center
+cp ./bash.functions  /etc/center
 
 
 ```
