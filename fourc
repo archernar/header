@@ -1,0 +1,55 @@
+#!/usr/bin/bash
+Tmp=/tmp/$$
+Tmp1=/tmp/$$_$$
+trap 'exit 0' INT HUP QUIT TERM ALRM USR1
+trap 'rm -f "$Tmp" "$Tmp1"' EXIT
+rm -f "$Tmp"  >/dev/null 2>&1
+rm -f "$Tmp1"  >/dev/null 2>&1
+
+input_file="/dev/stdin"
+extra="<!-- Google -->-"
+
+# Count the number of lines in the input file
+cat "$input_file"  | sed '/^$/d' | sort | uniq > $Tmp;
+line_count=$(wc -l < "$Tmp");
+num=$((line_count % 4))
+if [ "$num" -eq 3 ]; then
+    echo $extra >> $Tmp;
+fi
+if [ "$num" -eq 2 ]; then
+    echo $extra >> $Tmp;
+    echo $extra >> $Tmp;
+fi
+if [ "$num" -eq 1 ]; then
+    echo $extra >> $Tmp;
+    echo $extra >> $Tmp;
+    echo $extra >> $Tmp;
+fi
+
+line_count=$(wc -l < "$Tmp");
+num=$((line_count / 4))
+
+# Split the input file into two temporary files
+rm -f col_aa col_ab col_ac col_ad
+split -l "$num" "$Tmp" "col_"
+sed -i 's/^/<td>/'       col_aa
+sed -i 's/$/<\/td>/'     col_aa
+sed -i 's/^/<tr>/'       col_aa
+
+sed -i 's/^/<td>/'       col_ab
+sed -i 's/$/<\/td>/'     col_ab
+
+sed -i 's/^/<td>/'       col_ac
+sed -i 's/$/<\/td>/'     col_ac
+
+sed -i 's/^/<td>/'       col_ad
+sed -i 's/$/<\/td>/'     col_ad
+sed -i 's/$/<\/tr>/'     col_ad
+
+echo "<table border=0 cellpadding=1 cellspacing=1>"
+paste -d "\n" col_aa col_ab col_ac col_ad
+echo "</table>"
+
+rm -f col_aa col_ab col_ac col_ad
+
+exit 0

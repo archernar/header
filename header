@@ -57,6 +57,36 @@ usage() { printf "Usage: "; head -${SCRIPT_HEADSIZE:-99} ${0} | grep -e "^#+" | 
 usagefull() { head -${SCRIPT_HEADSIZE:-99} ${0} | grep -e "^#[%+-]" | sed -e "s/^#[%+-]//g" -e "s/\${SCRIPT_NAME}/${SCRIPT_NAME}/g" ; }
 scriptinfo() { head -${SCRIPT_HEADSIZE:-99} ${0} | grep -e "^#-" | sed -e "s/^#-//g" -e "s/\${SCRIPT_NAME}/${SCRIPT_NAME}/g"; }
 
+# Check if a file exists
+if [ -f "/path/to/your/file" ]; then
+  echo "File exists."
+else
+  echo "File does not exist."
+fi
+
+# Check if a directory exists
+if [ -d "/path/to/your/directory" ]; then
+  echo "Directory exists."
+else
+  echo "Directory does not exist."
+fi
+
+# Check if input file is provided
+if [ -z "$1" ]; then
+    echo "Usage: `basename "$0"` <input_file>"
+    exit 1
+if
+
+# filename munging
+input_file="$1"                                                                                         
+output_file="${input_file%.*}.html"
+cat "$input_file"  | sed '/^$/d' | sort | uniq > $Tmp; cp $Tmp "$input_file"
+line_count=$(wc -l < "$input_file")
+half_lines=$((line_count / 3))
+
+# ifs
+if [ "$num" -eq 2 ]; then
+
 
 isnfs () {                                                                                                                       
     LOCAL=`stat -f -c %T "$1"`                                                                                                   
