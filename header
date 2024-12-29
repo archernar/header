@@ -57,6 +57,17 @@ usage() { printf "Usage: "; head -${SCRIPT_HEADSIZE:-99} ${0} | grep -e "^#+" | 
 usagefull() { head -${SCRIPT_HEADSIZE:-99} ${0} | grep -e "^#[%+-]" | sed -e "s/^#[%+-]//g" -e "s/\${SCRIPT_NAME}/${SCRIPT_NAME}/g" ; }
 scriptinfo() { head -${SCRIPT_HEADSIZE:-99} ${0} | grep -e "^#-" | sed -e "s/^#-//g" -e "s/\${SCRIPT_NAME}/${SCRIPT_NAME}/g"; }
 
+cat xxx | grep "yyy"  | gawk '
+BEGIN {
+    NOTHING=0
+}
+//{
+    
+}
+END {
+    NOTHING=0
+}'
+
 # Check if a file exists
 if [ -f "/path/to/your/file" ]; then
   echo "File exists."

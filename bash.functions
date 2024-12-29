@@ -1,6 +1,58 @@
 #
 # bash functions
 ############################################################################################
+# ./BashDirName.sh
+############################################################################################
+No need for basename, and especially no need for a subshell running pwd (which adds an extra, and expensive, fork operation); the shell can do this internally using parameter expansion:
+
+result=${PWD##*/}          # to assign to a variable
+result=${result:-/}        # to correct for the case where PWD=/
+
+printf '%s\n' "${PWD##*/}" # to print to stdout
+                           # ...more robust than echo for unusual names
+                           #    (consider a directory named -e or -n)
+
+printf '%q\n' "${PWD##*/}" # to print to stdout, quoted for use as shell input
+                           # ...useful to make hidden characters readable.
+Note that if you're applying this technique in other circumstances (not PWD, but some other variable holding a directory name), you might need to trim any trailing slashes. The below uses bash's extglob support to work even with multiple trailing slashes:
+
+dirname=/path/to/somewhere//
+shopt -s extglob           # enable +(...) glob syntax
+result=${dirname%%+(/)}    # trim however many trailing slashes exist
+result=${result##*/}       # remove everything before the last / that still remains
+result=${result:-/}        # correct for dirname=/ case
+printf '%s\n' "$result"
+
+
+############################################################################################
+# ./CheckIfFileExists.sh
+############################################################################################
+#Check if file exists
+
+if [[ -f <file> ]]
+then
+    echo "<file> exists on your filesystem."
+fi
+
+
+# Check if file does not exist
+
+if [[ ! -f <file> ]]
+then
+    echo "<file> does not exist on your filesystem."
+fi
+
+
+# Check if directory exist
+
+if [[ -d "$DIRECTORY" ]]
+then
+    echo "$DIRECTORY exists on your filesystem."
+fi
+
+
+
+############################################################################################
 # ./console.sh
 ############################################################################################
 consolebar () {
@@ -113,6 +165,20 @@ exit 0
 
 
 ############################################################################################
+# ./ForEachDirectory.sh
+############################################################################################
+for d in */ ; do
+    echo "$d"
+done
+
+
+############################################################################################
+# ./ForEachFile.sh
+############################################################################################
+for f in ./*.java; do MakeHTMLCodePage "$f"; done
+
+
+############################################################################################
 # ./fullpathd.sh
 ############################################################################################
 find . -type d 2>/dev/null | sed 's#^.#/tmp#'
@@ -173,6 +239,49 @@ watch -n 1 'netstat -tpanl | grep ESTABLISHED'
 
 
 ############################################################################################
+# ./slapfilename.sh
+############################################################################################
+#!/usr/bin/bash
+Tmp=/tmp/$$
+
+if [ $# -eq 0 ]
+  then
+        rm -f ./taggerdo
+
+        for filename in *.$1; do
+            FILE="$filename"
+            NAME="$filename"
+            NAME=`echo "$NAME"     | sed "s/ \[.*\]//g"`
+            NAME=`echo "$NAME"     | sed "s/^[&]//g"`
+            NAME=`echo "$NAME"     | sed "s/[']//g"`
+            NAME=`echo "$NAME" | sed "s/_/ /g"`
+            NAME=`echo "$NAME" | sed "s/  / /g"`
+            NAME=`echo "$NAME" | sed "s/  / /g"`
+            NAME=`echo "$NAME" | sed "s/  / /g"`
+            NAME=`echo "$NAME" | sed "s/^ //"`
+            NAME=`echo "$NAME" | sed "s/^ //"`
+            NAME=`echo "$NAME" | sed "s/^ //"`
+            NAME=`echo "$NAME" | sed "s/ [.]mp3/.mp3/"`
+            NAME=`echo "$NAME" | sed "s/ [.]mp3/.mp3/"`
+            NAME=`echo "$NAME" | sed "s/ [.]mp3/.mp3/"`
+           CMD="mv \"./$filename\" \"$NAME\""
+           echo $CMD
+           echo $CMD > ./taggerdo
+           chmod 777  ./taggerdo
+           ./taggerdo
+           rm -f ./taggerdo
+        done
+
+fi
+
+
+############################################################################################
+# ./topTenCommands.sh
+############################################################################################
+history | awk '{CMD[$2]++;count++;}END { for (a in CMD)print CMD[a] " " CMD[a]/count*100 "% " a;}' | grep -v "./" | column -c3 -s " " -t | sort -nr | nl |  head -n10
+
+
+############################################################################################
 # ./update.sh
 ############################################################################################
 rm -f zed zzed zerd qed qqed fed ffed xx yy xxx yyy moe
@@ -225,6 +334,16 @@ cp ./bash.functions  /etc/center
 
 
 
+
+
+############################################################################################
+# ./UpperToLowerCase.sh
+############################################################################################
+str="Hello World"
+lowerStr=$(echo "$str" | tr '[:upper:]' '[:lower:]')
+ 
+echo "Input String: $str"
+echo "Result String:  $lowerStr"
 
 
 ############################################################################################
