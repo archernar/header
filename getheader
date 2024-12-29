@@ -1,0 +1,40 @@
+#!/usr/bin/bash
+Tmp=/tmp/$$
+Tmp1=/tmp/$$_$$
+trap 'exit 0' INT HUP QUIT TERM ALRM USR1
+trap 'rm -f "$Tmp" "$Tmp1"' EXIT
+rm -f "$Tmp"  >/dev/null 2>&1
+rm -f "$Tmp1"  >/dev/null 2>&1
+
+
+SCRIPTNAME=""
+
+while getopts "s:" arg
+do
+    case $arg in
+        s) SCRIPTNAME="$OPTARG"
+           echo $SCRIPTNAME
+           if [ ! -f "$SCRIPTNAME" ]; then
+               echo "The file [$SCRIPTNAME] does not exist."
+               exit 0
+           fi
+           exit 0
+           ;;
+    esac
+done
+shift $(($OPTIND - 1))
+
+
+
+wget -O newbashscript https://raw.githubusercontent.com/archernar/header/refs/heads/master/header
+wget -O justhelp https://raw.githubusercontent.com/archernar/header/refs/heads/master/justhelp
+wget -O bash.functions https://raw.githubusercontent.com/archernar/header/refs/heads/master/bash.functions
+ls -l newbashscript
+ls -l justhelp
+ls -l bash.functions
+echo ""
+echo ""
+echo "https://github.com/archernar/header"
+echo ""
+echo ""
+

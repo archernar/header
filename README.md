@@ -260,8 +260,10 @@ shift $(($OPTIND - 1))
 
 
 wget -O newbashscript https://raw.githubusercontent.com/archernar/header/refs/heads/master/header
+wget -O justhelp https://raw.githubusercontent.com/archernar/header/refs/heads/master/justhelp
 wget -O bash.functions https://raw.githubusercontent.com/archernar/header/refs/heads/master/bash.functions
 ls -l newbashscript
+ls -l justhelp
 ls -l bash.functions
 echo ""
 echo ""
