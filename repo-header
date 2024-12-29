@@ -1,0 +1,137 @@
+#!/usr/bin/bash
+Tmp=/tmp/$$
+Tmp1=/tmp/$$_$$
+trap 'exit 0' INT HUP QUIT TERM ALRM USR1
+trap 'rm -f "$Tmp" "$Tmp1"' EXIT
+rm -f "$Tmp"  >/dev/null 2>&1
+rm -f "$Tmp1"  >/dev/null 2>&1
+
+#================================================================
+# HEADER
+#================================================================
+#% SYNOPSIS
+#+    ${SCRIPT_NAME} [-a <ARG>] [-c <ARG>] [-f <filename>] [-x <ARG>] [-l] [-s] [-u] [-h] file
+#%
+#% DESCRIPTION
+#%    if no optional arguments are given then file is copied,added to the repo
+#%
+#% OPTIONS
+#%   -a <filename>        copy, add <filename> to repo 
+#%   -c <filename>        edits <filename> in repo, creates file if required 
+#%   -f <filename>        ls -l <filename> in repo   
+#%   -x <filename>        copy,add,commit,push origin master <filename> to repo
+#%   -l                   ls -l repo 
+#%   -s                   repo git status 
+#%   -u                   commit and push origin master 
+#%   -h                   print help text
+#%
+#% EXAMPLES
+#%    ${SCRIPT_NAME} filename 
+#%
+#================================================================
+#- IMPLEMENTATION
+#-    version         ${SCRIPT_NAME} 1.0.1
+#-    author          ME
+#-    copyright       Copyright (c) All Rights Reserved
+#-    license         All Rights Reserved
+#-    script_id       1.0.1
+#-
+#================================================================
+#  HISTORY
+#     2024/12/30 : ME : Script creation
+# 
+#================================================================
+#================================================================
+# END_OF_HEADER
+#================================================================
+
+#== needed variables ==#
+SCRIPT_HEADSIZE=$(head -200 ${0} |grep -n "^# END_OF_HEADER" | cut -f1 -d:)
+SCRIPT_NAME="$(basename ${0})"
+
+#== usage functions ==#
+usage() { printf "Usage: "; head -${SCRIPT_HEADSIZE:-99} ${0} | grep -e "^#+" | sed -e "s/^#+[ ]*//g" -e "s/\${SCRIPT_NAME}/${SCRIPT_NAME}/g" ; }
+usagefull() { head -${SCRIPT_HEADSIZE:-99} ${0} | grep -e "^#[%+-]" | sed -e "s/^#[%+-]//g" -e "s/\${SCRIPT_NAME}/${SCRIPT_NAME}/g" ; }
+scriptinfo() { head -${SCRIPT_HEADSIZE:-99} ${0} | grep -e "^#-" | sed -e "s/^#-//g" -e "s/\${SCRIPT_NAME}/${SCRIPT_NAME}/g"; }
+REPO="/etc/scm/header"
+
+while getopts "a:c:f:x:lsuh" arg
+do
+    case $arg in
+        h) usagefull;
+           exit 0;
+           ;;
+        c)
+           F="$OPTARG"
+           if [ -f "./$F" ]; then
+               echo "./$F exists."
+               vi "./$F"
+           else
+               touch "./$F"
+               vi "./$F"
+           fi
+           exit 0;
+           ;;
+        f)
+           F="$OPTARG"
+           ls -l "$F"
+           exit 0;
+           ;;
+        s)
+           git -C "$REPO" status
+           exit 0;
+           ;;
+        l)
+           ls -l "$REPO"
+           exit 0;
+           ;;
+        u)
+           git -C "$REPO" status;
+           # git -C "$REPO" add -u;
+           git -C "$REPO" commit  -m "Update"
+           git -C "$REPO" push -u origin master;
+           exit 0;
+           ;;
+        x)
+           F="$OPTARG"
+           echo "Copying"
+           cp "$F" "$REPO/$F"
+           echo "Adding to Repo: $REPO"
+           git -C "$REPO" add "$F"
+           echo "Commiting Repo: $REPO"
+           git -C "$REPO" commit  -m "Update"
+           echo "Pushing Repo: $REPO origin master"
+           git -C "$REPO" push -u origin master;
+           exit 0;
+           ;;
+        a)
+           F="$OPTARG"
+           echo "Copying"
+           cp "$F" "$REPO/$F"
+           echo "Adding to Repo: $REPO"
+           git -C "$REPO" add "$F"
+           exit 0;
+           ;;
+    esac
+done
+shift $(($OPTIND - 1))
+
+
+# Check if a file exists
+if [ -f "$REPO/$1" ]; then
+  echo "$REPO/$1 exists."
+else
+  echo "$REPO/$1 does not exist."
+  echo "Copying"
+  cp  "$1" "$REPO/$1"
+  echo "Adding to Repo: $REPO"
+  git -C "$REPO" add "$1"
+fi
+
+
+
+
+
+
+
+
